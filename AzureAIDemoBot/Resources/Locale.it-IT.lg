@@ -1,6 +1,31 @@
 > Language Generation definition file.
 > See https://aka.ms/language-generation to learn more
 
+# Greetings_AskName
+- Ciao, come ti chiami?
+- Ciao, qual'è il tuo nome?
+
+# Greetings_NiceToMeetYou
+- Piacere di conoscerti ${name}!
+- Ciao ${name}, piacere di conoscerti!
+
+# Greetings_WelcomeBack
+- Bentornato ${name}!
+- Ciao ${name}!
+- Che piacere rivederti ${name}!
+
+# LookupSession_FoundTheseSessions
+- Ho trovato queste sessioni.
+- Dai un'occhiata a cosa ho trovato.
+
+# LookupSession_FoundNothing
+- Non ho trovato ciò che cercavi.
+- Sembra che non ci sia nulla che possa interessarti.
+
+# WeatherForecast_AskCity
+- Di quale città vuoi che controlli.
+- Di quale città vuoi controllare il meteo?
+
 # None
 - Mi dispiace, ma non ho capito!
 - Non ho capito cosa volevi dirmi.

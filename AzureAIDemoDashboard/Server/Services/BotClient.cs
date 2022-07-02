@@ -44,10 +44,26 @@ public class BotClient
 
     private BotResponse ToBotResponse(Activity activity)
     {
+        string? tableJson = null;
+        string? cardJson = null;
+
+        if (activity.Attachments is not null)
+        {
+            var tableAttachment =
+                activity.Attachments.FirstOrDefault(x => x.ContentType == "application/my-data-content");
+            tableJson = tableAttachment?.Content?.ToString();
+
+            var cardAttachment = activity.Attachments.FirstOrDefault(
+                x => x.ContentType == "application/vnd.microsoft.card.adaptive");
+            cardJson = cardAttachment?.Content?.ToString();
+        }
+
         return new()
         {
             ResponseText = activity.Text,
             ResponseExpected = activity.InputHint == InputHints.ExpectingInput,
+            ResponseTable = tableJson,
+            ResponseCard = cardJson,
         };
     }
 }

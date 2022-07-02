@@ -1,0 +1,54 @@
+<div class="card my-2">
+    <div class="card-body">
+        <table class="table">
+            <thead>
+            @if (Data.Any())
+            {
+                <tr>
+                    @foreach (var key in Data.First().Keys)
+                    {
+                        <th scope="col">@key</th>
+                    }
+                </tr>
+            }
+            </thead>
+            <tbody>
+            @foreach (var row in Data)
+            {
+                <tr>
+                    @foreach (var (_, value) in row)
+                    {
+                        <td>@value</td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+@code
+{
+    private string? _dataJson;
+    
+    [Parameter] public List<Dictionary<string, string>> Data { get; set; } = new(0);
+    
+    [Parameter]
+    public string? DataJson
+    {
+        get => _dataJson;
+        set
+        {
+            _dataJson = value;
+         
+            Data.Clear();
+            if (!string.IsNullOrEmpty(_dataJson))
+            {
+                var data = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(_dataJson);
+                if (data is not null) 
+                    Data = data;
+            }
+
+            StateHasChanged();
+        }
+    }
+}

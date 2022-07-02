@@ -1,0 +1,38 @@
+@using System.IO
+@using System.Reflection
+@using AdaptiveCards.Rendering.Html
+@inject IJSRuntime JsRuntime
+
+<div class="my-2">
+    <div class="card">
+        <div class="card-body p-0">
+            @((MarkupString)RenderCard())
+        </div>
+    </div>
+</div>
+
+@code {
+    private string _oldCardJson = "";
+
+    [Parameter] public string? CardJson { get; set; }
+
+    protected override bool ShouldRender() => !string.IsNullOrEmpty(CardJson) && CardJson != _oldCardJson;
+
+    private string RenderCard()
+    {
+        try
+        {
+            var renderer = new AdaptiveCardRenderer();
+            var card = AdaptiveCards.AdaptiveCard.FromJson(CardJson).Card;
+            var renderedCard = renderer.RenderCard(card);
+
+            _oldCardJson = CardJson ?? "";
+            return renderedCard.Html.ToString();
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return $"<span>{e.Message}</span>";
+        }
+    }
+}

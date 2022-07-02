@@ -14,25 +14,4 @@
     <PackageReference Include="AdaptiveCards.Templating" Version="1.3.1" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="Dialogs\WeatherForecastDialog.cs" />
-    <Compile Remove="Dialogs\LookupSessionDialog.cs" />
-    <Compile Remove="Dialogs\GreetingsDialog.cs" />
-    <Compile Remove="Data\WeatherResult.cs" />
-    <Compile Remove="Data\Session.cs" />
-    <Compile Remove="Interfaces\IWeatherService.cs" />
-    <Compile Remove="Services\WeatherService.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Interfaces" />
-    <Folder Include="Services" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="Resources\WeatherCard.it-IT.json" />
-    <Content Remove="Resources\WeatherCard.en-US.json" />
-    <Content Remove="Resources\SessionsData.json" />
-  </ItemGroup>
-
 </Project>

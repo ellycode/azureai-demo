@@ -47,9 +47,4 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Remove="Components\TableCard.razor" />
-    <Content Remove="Components\AdaptiveCard.razor" />
-  </ItemGroup>
-
 </Project>

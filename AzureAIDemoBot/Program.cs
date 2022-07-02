@@ -18,7 +18,14 @@ builder.Services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>
 
 // Create the bot as a transient. In this case the ASP Controller is expecting an IBot.
 builder.Services.AddSingleton<MainDialog>();
+builder.Services.AddSingleton<GreetingsDialog>();
+builder.Services.AddSingleton<LookupSessionDialog>();
+builder.Services.AddSingleton<WeatherForecastDialog>();
 builder.Services.AddTransient<IBot, DemoBot<MainDialog>>();
+
+// Create services that will fulfill data requests
+builder.Services.AddSingleton<ISessionsService, SessionsService>();
+builder.Services.AddSingleton<IWeatherService, WeatherService>();
 
 var app = builder.Build();
 

@@ -23,6 +23,16 @@
             </div>
         </div>
     }
+
+    @if (!string.IsNullOrEmpty(response.ResponseTable))
+    {
+        <TableCard DataJson="@response.ResponseTable"/>
+    }
+
+    @if (!string.IsNullOrEmpty(response.ResponseCard))
+    {
+        <AdaptiveCard CardJson="@response.ResponseCard"/>
+    }
 }
 
 @code {
