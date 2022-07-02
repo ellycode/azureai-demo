@@ -11,7 +11,7 @@ public class BotController : ControllerBase
         _bot = bot;
     }
 
-    [HttpPost]
+    [HttpPost()]
     [Route("{action}")]
     public async Task<IActionResult> SendMessage([FromBody] BotRequest request)
     {

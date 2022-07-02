@@ -27,4 +27,13 @@
     <data name="Send" xml:space="preserve">
         <value>Invia</value>
     </data>
+    <data name="StartRecording" xml:space="preserve">
+        <value>Clicca per registrare</value>
+    </data>
+    <data name="StatusStopped" xml:space="preserve">
+        <value>Fermo</value>
+    </data>
+    <data name="StatusRecording" xml:space="preserve">
+        <value>In registrazione</value>
+    </data>
 </root>

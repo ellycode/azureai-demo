@@ -1,0 +1,128 @@
+﻿@using AzureAIDemoDashboard.Client.Resources
+@inject SpeechService _speechService
+@inject NavigationManager _navigationManager
+@inject CultureHelper _cultureHelper
+@inject IStringLocalizer<LanguageResource> _localizer
+
+<audio></audio>
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="@_localizer[LanguageResource.StartRecording]" @bind="_messageRequest">
+    <button class="btn btn-primary" @onclick="ButtonClick">
+        <span class="oi oi-microphone"></span> 
+        @switch (_status)
+        {
+            case Status.Stopped:
+                @_localizer[LanguageResource.StatusStopped]
+                break;
+            case Status.Recording:
+                @_localizer[LanguageResource.StatusRecording]
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    </button>
+    <span>@_message</span>
+</div>
+@foreach (var response in _responseMessages)
+{
+    @if (!string.IsNullOrEmpty(response.ResponseText))
+    {
+        <div class="card my-2">
+            <div class="card-body">
+                <p class="card-text">@response.ResponseText</p>
+            </div>
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(response.ResponseTable))
+    {
+        <TableCard DataJson="@response.ResponseTable"/>
+    }
+    
+    @if (!string.IsNullOrEmpty(response.ResponseCard))
+    {
+        <AdaptiveCard
+            CardJson="@response.ResponseCard"
+            HandleCardSpeech="(sender, cardSpeech) => _ = SynthesizeText(cardSpeech)"/>
+    }
+}
+
+@code {
+    enum Status
+    {
+        Stopped,
+        Recording,
+    }
+    
+    private static string _userId = Guid.NewGuid().ToString();
+    private Status _status = Status.Stopped;
+    private string _message = "";
+    private string _messageRequest = "";
+    private BotResponse[] _responseMessages = Array.Empty<BotResponse>();
+
+    [Parameter]
+    public CultureInfo? CurrentCulture { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _speechService.SpeechResultCallback += SpeechResultCallback;
+    }
+    
+    protected override Task OnParametersSetAsync() => 
+        CurrentCulture is not null
+            ? _speechService.InitAsync(CurrentCulture.Name)
+            : Task.CompletedTask;
+
+    private ValueTask SynthesizeText(string text) => _speechService.SynthesizeTextAsync(text, CurrentCulture!.Name);
+
+    private async Task ButtonClick()
+    {
+        if (_status != Status.Stopped)
+        {
+            await _speechService.StopAsync();
+            _status = Status.Stopped;
+        }
+        else
+        {
+            await _speechService.StartRecordAsync();
+            _status = Status.Recording;
+        }
+    }
+    
+    private void SpeechResultCallback(object? sender, SpeechResult result)
+    {
+        if (!string.IsNullOrEmpty(result.Text))
+        {
+            _messageRequest = result.Text;
+            _ = SendMessage();
+        }
+
+        StateHasChanged();
+    }
+    
+    private async Task SendMessage()
+    {
+        var http = new HttpClient
+        {
+            BaseAddress = new Uri(_navigationManager.BaseUri),
+        };
+
+        try
+        {
+            _message = "";
+            var request = new BotRequest { Message = _messageRequest, UserId = _userId, Locale = CurrentCulture!.Name};
+            var response = await http.PostAsJsonAsync("bot/sendmessage", request);
+
+            _responseMessages = await response.Content.ReadFromJsonAsync<BotResponse[]>() ?? Array.Empty<BotResponse>();
+            
+            // Synthesize response
+            var message = string.Join(' ', _responseMessages.Select(x => x.ResponseText));
+            _ = SynthesizeText(message);
+        }
+        catch (Exception ex)
+        {
+            _message = ex.Message;
+        }
+        StateHasChanged();
+    }
+}

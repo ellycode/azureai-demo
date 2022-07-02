@@ -1,4 +1,5 @@
 using AzureAIDemoDashboard.Client;
+using AzureAIDemoDashboard.Client.Shared;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -9,6 +10,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 builder.Services.AddScoped(_ => new HttpClient {BaseAddress = new(builder.HostEnvironment.BaseAddress)});
 builder.Services.AddLocalization();
 builder.Services.AddSingleton<CultureHelper>();
+builder.Services.AddSingleton<SpeechService>();
+
 var app = builder.Build();
 
 

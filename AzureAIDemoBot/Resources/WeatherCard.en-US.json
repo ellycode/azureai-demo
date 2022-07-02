@@ -2,7 +2,7 @@
     "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
     "type": "AdaptiveCard",
     "version": "1.3",
-    "speak": "",
+    "speak": "It's ${weather[0].description} in ${name}, with a temperature of ${formatNumber(main.temp, 0)} degrees.",
     "body": [
         {
             "type": "TextBlock",

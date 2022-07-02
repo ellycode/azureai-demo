@@ -6,23 +6,23 @@ public class BotClient
 
     public BotClient()
     {
-        _http = new()
+        _http = new HttpClient()
         {
-            BaseAddress = new("http://localhost:3978/api/messages"),
+            BaseAddress = new Uri("http://localhost:3978/api/messages"),  
         };
     }
 
-    public async Task<List<BotResponse>> SendMessage(BotRequest request, CancellationToken cancellationToken = default)
+    public async Task<List<BotResponse>> SendMessage(BotRequest request, CancellationToken cancellationToken=default)
     {
-        var activity = new Activity
+        var activity = new Activity()
         {
             Type = ActivityTypes.Message,
             Text = request.Message,
             DeliveryMode = DeliveryModes.ExpectReplies,
-            From = new() {Id = request.UserId, Name = "user", Role = "user"},
-            Recipient = new() {Id = "bot", Name = "bot", Role = "bot"},
-            ChannelId = "dashboard",
-            Conversation = new() {Id = request.UserId},
+            From = new ChannelAccount() { Id = request.UserId, Name = "user", Role = "user" },
+            Recipient = new ChannelAccount() { Id = "bot", Name = "bot", Role = "bot" },
+            ChannelId = "elly-dashboard",
+            Conversation = new ConversationAccount() { Id = $"conv-{request.UserId}" },
             ServiceUrl = "http://localhost",
             Locale = request.Locale,
             LocalTimestamp = DateTime.UtcNow,
@@ -46,19 +46,18 @@ public class BotClient
     {
         string? tableJson = null;
         string? cardJson = null;
-
+        
         if (activity.Attachments is not null)
         {
-            var tableAttachment =
-                activity.Attachments.FirstOrDefault(x => x.ContentType == "application/my-data-content");
+            var tableAttachment = activity.Attachments.FirstOrDefault(x => x.ContentType == "application/my-data-content");
             tableJson = tableAttachment?.Content?.ToString();
-
+            
             var cardAttachment = activity.Attachments.FirstOrDefault(
                 x => x.ContentType == "application/vnd.microsoft.card.adaptive");
             cardJson = cardAttachment?.Content?.ToString();
         }
 
-        return new()
+        return new BotResponse
         {
             ResponseText = activity.Text,
             ResponseExpected = activity.InputHint == InputHints.ExpectingInput,

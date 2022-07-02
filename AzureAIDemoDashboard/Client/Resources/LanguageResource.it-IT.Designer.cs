@@ -62,5 +62,23 @@ namespace AzureAIDemoDashboard.Client.Resources {
                 return ResourceManager.GetString("Send", resourceCulture);
             }
         }
+        
+        internal static string StartRecording {
+            get {
+                return ResourceManager.GetString("StartRecording", resourceCulture);
+            }
+        }
+        
+        internal static string StatusStopped {
+            get {
+                return ResourceManager.GetString("StatusStopped", resourceCulture);
+            }
+        }
+        
+        internal static string StatusRecording {
+            get {
+                return ResourceManager.GetString("StatusRecording", resourceCulture);
+            }
+        }
     }
 }
