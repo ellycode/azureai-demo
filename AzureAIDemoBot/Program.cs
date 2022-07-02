@@ -26,6 +26,7 @@ builder.Services.AddTransient<IBot, DemoBot<MainDialog>>();
 // Create services that will fulfill data requests
 builder.Services.AddSingleton<ISessionsService, SessionsService>();
 builder.Services.AddSingleton<IWeatherService, WeatherService>();
+builder.Services.AddSingleton<IRecognizer, IntentRecognizer>();
 
 var app = builder.Build();
 

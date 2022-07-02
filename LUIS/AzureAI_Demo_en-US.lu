@@ -1,0 +1,133 @@
+
+> LUIS application information
+> !# @app.name = AzureAI_Demo_EN
+> !# @app.versionId = 0.1
+> !# @app.culture = en-us
+> !# @app.luis_schema_version = 7.0.0
+> !# @app.settings.NormalizeDiacritics = true
+> !# @app.settings.NormalizePunctuation = true
+> !# @app.tokenizerVersion = 1.0.0
+
+
+> # Intent definitions
+
+# Greetings
+- good afternoon
+- good morning
+- good evening
+- good morning
+- hello
+- hello to all friends!
+- hello hello
+- hey
+- i could use some information
+- nice to meet you
+
+
+# LookupSession
+- search all talks dealing with cloud azure
+- search for a nice session
+- search for an interesting session
+- who will be talking about machine learning?
+- will there be anyone talking about devops?
+- are there any talks that talk about cloud?
+- are there any sessions that talk about cloud?
+- are there any talks that talk about devops?
+- what will andrea talk about?
+- what about talks that talk about machine learning?
+- i am interested in talks that deal with azure
+- i would be interested in learning about gitops
+- i would like to learn more about serverless
+- i would like to see a presentation on dev ops
+- will john also be speaking at this event?
+- what session did pasquale bring?
+- what sessions will michele give?
+- how many sessions are there that talk about api
+- will salvatore talk to us about azure?
+- i am glad to be at the event!
+- find me sessions that talk about devops
+- find me a speech about azure
+- i would like to attend sessions on machine learning
+- i would like to attend a session that talks about machine learning
+
+# None
+- 0 stars for wendy's at {@Places.AbsoluteLocation=kirkland} on yelp.com
+- 3 stelle per il futuro volo del boeing a {@Places.AbsoluteLocation=everett} on bing
+- is the chutney's Indian restaurant in {@Places.AbsoluteLocation=bellevue} expensive.
+- list the 3 best aquariums near {@Places.AbsoluteLocation=virginia beach in virginia}
+- lists the best 3 shoe stores in {@Places.AbsoluteLocation=city}
+- lists the best restaurants in {@Places.AbsoluteLocation=masana}
+- lists five-star restaurants in the {@Places.AbsoluteLocation=county of durham}
+- list strip clubs in {@Places.AbsoluteLocation=lake charles in louisiana}
+- menu of casa fiesta mexican restaurant in {@Places.AbsoluteLocation=nashville in tennessee}
+- menu of al`s pizzeria in {@Places.AbsoluteLocation=castile in new york}
+- domino's pizza menu at {@Places.AbsoluteLocation=walkertown}
+- tarasco's tacos and wings menu at {@Places.AbsoluteLocation=cartersville}
+- best indian buffet in the {@Places.AbsoluteLocation=atlanta metropolitan}
+- best happy hour food in {@Places.AbsoluteLocation=lamesa in california}
+- find the subway number on the {@Places.AbsoluteLocation=26th amp sycamore in sioux falls}
+- find the {@Places.AbsoluteLocation=angle of fifth street and oak street}
+- call salvatore
+- email andrea
+- contact foo
+
+
+> !# @intent.inherits = name : Weather.QueryWeather; domain_name : Weather; model_name : QueryWeather
+
+# Weather.QueryWeather
+- will I need my umbrella today in {@Places.AbsoluteLocation=killarney, manitoba}
+- what is the weather like in {@Places.AbsoluteLocation=palermo}?
+- what's the weather like?
+- how is the weather in {@Places.AbsoluteLocation=naples}?
+- what will the weather be like in {@Places.AbsoluteLocation=torino}?
+- what will the weather be like today?
+- is it expected to rain all day in {@Places.AbsoluteLocation=conroe}?
+- is it suitable for hiking this weekend in {@Places.AbsoluteLocation=seattle}?
+- is it a suitable day for fishing tomorrow in {@Places.AbsoluteLocation=shanghai}
+- is it hot in {@Places.AbsoluteLocation=cancun} in May
+- do you have the weather information?
+- i need a jacket at {@Places.AbsoluteLocation=ford field}
+- it will snow tomorrow in {@Places.AbsoluteLocation=lexington (nc), us}
+- it will rain in {@Places.AbsoluteLocation=ho chi minh city} tonight
+- it will rain in {@Places.AbsoluteLocation=myrtle beach} today
+- it will rain in {@Places.AbsoluteLocation=paultons park} this Saturday
+- it will rain at {@Places.AbsoluteLocation=ruby corner} today
+- it will rain at {@Places.AbsoluteLocation=seattle} on Monday
+- it will rain at {@Places.AbsoluteLocation=twickenham} today
+- it will rain in {@Places.AbsoluteLocation=west columbia} tonight
+- it will rain tomorrow in {@Places.AbsoluteLocation=nevada, missouri}
+- it will rain tomorrow in {@Places.AbsoluteLocation=pattaya}
+- it will rain tomorrow in {@Places.AbsoluteLocation=tokyo}
+- it will rain tomorrow in {@Places.AbsoluteLocation=hanoi}
+- it will rain in {@Places.AbsoluteLocation=gambia}
+- it will rain today in {@Places.AbsoluteLocation=hyderabad}
+- it will be nice and warm in {@Places.AbsoluteLocation=orlando} this weekend
+- it will be sunny {@Places.AbsoluteLocation=a saint austell} on Sunday
+- it will be sunny tomorrow in {@Places.AbsoluteLocation=san jose}
+- it is raining right now in {@Places.AbsoluteLocation=stoke-on-trent}
+- would like to know what the weather is like today
+
+@ intent Weather.QueryWeather usesFeatures Places.AbsoluteLocation,Cities
+
+> # Entity definitions
+
+> !# @entity.inherits = name : Places.AbsoluteLocation; domain_name : Places; model_name : AbsoluteLocation
+
+@ ml Places.AbsoluteLocation usesFeature Cities
+
+
+> # PREBUILT Entity definitions
+
+@ prebuilt keyPhrase
+
+
+> # Phrase list definitions
+
+@ phraselist Cities(interchangeable) disabledForAllModels = 
+	- turin,milan,naples,genoa,palermo,cagliari,rome,florence,bari,nuremberg,berlin,hamburg,munich,cologne,frankfurt,stuttgart,dusseldorf
+
+> # List entities
+
+> # RegEx entities
+
+
