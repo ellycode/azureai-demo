@@ -1,0 +1,30 @@
+@using AzureAIDemoDashboard.Client.Resources
+@inject IStringLocalizer<LanguageResource> _localizer
+
+<form class="d-flex">
+    <select class="form-select" aria-label="@_localizer[LanguageResource.Language]" @onchange="OnChange">
+        @foreach (var ci in SupportedCultures)
+        {
+            <option selected="@(ci.Name == CurrentCulture.Name)"
+                    value="@ci.Name">
+                @ci.DisplayName
+            </option>
+        }
+    </select>
+</form>
+
+@code {
+
+    [Parameter]
+    public CultureInfo CurrentCulture { get; set; } = null!;
+
+    [Parameter]
+    public IEnumerable<CultureInfo> SupportedCultures { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback<CultureInfo> CultureSelected { get; set; }
+
+    private Task OnChange(ChangeEventArgs args) =>
+        CultureSelected.InvokeAsync(new(args.Value?.ToString() ?? "en-US"));
+
+}

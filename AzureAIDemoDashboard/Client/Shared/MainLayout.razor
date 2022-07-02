@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+@inject NavigationManager _navigationManager
+@inject CultureHelper _cultureHelper
+
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Azure AI Demo Dashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://github.com/microsoft/BotBuilder-Samples" target="_blank">BotFramework Samples</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://adaptivecards.io/designer" target="_blank">AdaptiveCards Designer</a>
+                    </li>
+                </ul>
+                <LanguagePicker
+                    CurrentCulture="CultureInfo.DefaultThreadCurrentUICulture"
+                    SupportedCultures="_supportedCultures"
+                    CultureSelected="SetCultureAsync"/>
+            </div>
+        </div>
+    </nav>
+</header>
+<main>
+    <div class="container">
+        @Body
+    </div>
+</main>
+
+@code
+{
+    private readonly CultureInfo[] _supportedCultures =
+    {
+        new CultureInfo("en-US"),
+        new CultureInfo("it-IT"),
+    };
+
+    private async Task SetCultureAsync(CultureInfo culture)
+    {
+        await _cultureHelper.SetCultureAsync(culture);
+        _navigationManager.NavigateTo(_navigationManager.Uri, forceLoad: true);
+    }
+}

@@ -1,0 +1,14 @@
+global using System;
+global using System.Threading.Tasks;
+global using AzureAIDemoBot;
+global using AzureAIDemoBot.Extensions;
+global using AzureAIDemoBot.Bots;
+global using AzureAIDemoBot.Dialogs;
+global using Microsoft.AspNetCore.Mvc;
+global using Microsoft.Bot.Builder;
+global using Microsoft.Bot.Builder.Integration.AspNet.Core;
+global using Microsoft.Bot.Builder.TraceExtensions;
+global using Microsoft.Bot.Connector.Authentication;
+global using Microsoft.Bot.Schema;
+global using Microsoft.Extensions.Logging;
+global using Microsoft.Bot.Builder.Dialogs;

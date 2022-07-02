@@ -1,0 +1,65 @@
+﻿@using AzureAIDemoDashboard.Client.Resources
+@inject IJSRuntime _js
+@inject NavigationManager _navigationManager
+@inject IStringLocalizer<LanguageResource> _localizer
+
+<form @onsubmit="SendMessage">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" id="messageRequest"
+               placeholder="@_localizer[LanguageResource.SendAMessage]"
+               @bind="_messageRequest">
+        <button class="btn btn-primary">@_localizer[LanguageResource.Send]</button>
+    </div>
+    <span>@_message</span>
+</form>
+<br/>
+@foreach (var response in _responseMessages)
+{
+    @if (!string.IsNullOrEmpty(response.ResponseText))
+    {
+        <div class="card my-2">
+            <div class="card-body">
+                <p class="card-text">@response.ResponseText</p>
+            </div>
+        </div>
+    }
+}
+
+@code {
+
+    [Parameter]
+    public CultureInfo CurrentCulture { get; set; } = null!;
+
+    private static string _userId = Guid.NewGuid().ToString();
+    private string _message = "";
+    private string _messageRequest = "";
+    private BotResponse[] _responseMessages = Array.Empty<BotResponse>();
+
+    private async Task SendMessage()
+    {
+        var http = new HttpClient
+        {
+            BaseAddress = new(_navigationManager.BaseUri),
+        };
+
+        try
+        {
+            _message = "";
+            var request = new BotRequest
+            {
+                Message = _messageRequest,
+                UserId = _userId,
+                Locale = CurrentCulture.Name,
+            };
+            var response = await http.PostAsJsonAsync("bot/sendmessage", request);
+
+            _responseMessages = await response.Content.ReadFromJsonAsync<BotResponse[]>() ?? Array.Empty<BotResponse>();
+            _messageRequest = "";
+        }
+        catch (Exception ex)
+        {
+            _message = ex.Message;
+        }
+    }
+
+}

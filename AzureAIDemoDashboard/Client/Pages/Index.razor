@@ -1,0 +1,16 @@
+﻿@inject CultureHelper _cultureHelper
+@page "/"
+
+<PageTitle>Azure AI Dashboard</PageTitle>
+
+<Text CurrentCulture="_currentCulture"/>
+
+@code {
+    private CultureInfo _currentCulture = null!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _currentCulture = await _cultureHelper.GetCultureAsync();
+    }
+
+}
