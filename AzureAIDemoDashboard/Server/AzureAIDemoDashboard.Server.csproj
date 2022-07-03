@@ -17,4 +17,10 @@
     <ProjectReference Include="..\Shared\AzureAIDemoDashboard.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="OkComputer.table">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

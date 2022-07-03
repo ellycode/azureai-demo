@@ -35,6 +35,26 @@ export function startRecord() {
     });
 }
 
+export function startKeywordRecognition() {
+    gHarker.enabled = true;
+    gHarker.on('stopped_speaking', () => {
+        let blob = gHarker.exportBlobWAV();
+        let data = new FormData();
+        data.append('file', blob, 'audio.wav');
+        fetch(`/speech/recognizekeyword?locale=${gLocale}`,
+            {
+                method: 'post',
+                body: data
+            })
+            .then(result => {
+                result.json().then(data => {
+                    gThisRef.invokeMethod(
+                        'ShowResult', data);
+                });
+            });
+    });
+}
+
 export async function synthesizeText(request) {
     let response = await fetch('/speech/synthesizetext',
         {

@@ -49,6 +49,50 @@ public class SpeechController : ControllerBase
         var speechResult = new SpeechResult { Text = result.Text };
         return Ok(speechResult);
     }
+    
+    [HttpPost()]
+    [Route("{action}")]
+    public async Task<IActionResult> RecognizeKeyword(IFormFile file, [FromQuery] string locale)
+    {
+        await using var stream = file.OpenReadStream();
+        var speechConfig = GetSpeechConfigFromLocale(locale);
+        var audioStreamFormat = AudioStreamFormat.GetWaveFormatPCM(16000, 16, 1); // Audio format we expect from the Client
+        var audioConfig = AudioConfig.FromStreamInput(new GenericInputAudioStream(stream), audioStreamFormat);
+        var recognizer = new SpeechRecognizer(speechConfig, audioConfig);
+        var model = KeywordRecognitionModel.FromFile("OkComputer.table");
+        
+        var tcs = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var recognizedKeyword = false;
+        var recognizedText = "";
+        
+        recognizer.Canceled += (_, _) => tcs.SetResult();
+        recognizer.Recognized += (_, e) =>
+        {
+            _logger.LogInformation("{result}: {text}", e.Result.Reason, e.Result.Text);
+            switch (e.Result.Reason)
+            {
+                case ResultReason.RecognizedKeyword:
+                    recognizedKeyword = true;
+                    break;
+                case ResultReason.RecognizedSpeech:
+                    recognizedText = e.Result.Text;
+                    tcs.SetResult();
+                    break;
+                case ResultReason.Canceled:
+                case ResultReason.NoMatch:
+                    tcs.SetResult();
+                    break;
+            }
+        };
+
+        await recognizer.StartKeywordRecognitionAsync(model);
+        await tcs.Task;
+        return Ok(new SpeechResult
+        {
+            Text = recognizedText,
+            KeywordRecognized = recognizedKeyword,
+        });
+    }
 
     [HttpPost()]
     [Route("{action}")]

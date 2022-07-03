@@ -61,4 +61,11 @@ public class SpeechService: IAsyncDisposable
         _thisRef?.Dispose();
         if (_speechModule != null) await _speechModule.DisposeAsync();
     }
+
+    public ValueTask StartKeywordRecognitionAsync()
+    {
+        return !_initialized
+            ? ValueTask.CompletedTask
+            : _speechModule!.InvokeVoidAsync("startKeywordRecognition");
+    }
 }
